@@ -10,7 +10,16 @@ import {
 } from "../layout/Utils";
 import axios, { BASE_URL } from "../api/axios";
 import { Navigate } from "react-router-dom";
-
+import swal from "sweetalert";
+const initialState = {
+  cardNumber: "",
+  name: "",
+  expiry: "",
+  cvc: "",
+  issuer: "",
+  focused: "",
+  formData: null,
+};
 export default class PaymentForm extends React.Component {
   state = {
     cardNumber: "",
@@ -74,13 +83,39 @@ export default class PaymentForm extends React.Component {
           `${BASE_URL}/createOrder`,
           orderObject
         );
-
         this.setState({ success: true });
+        swal({
+          title: "Success!",
+          text: "Payment successful!",
+          icon: "success",
+          button: "Ok!",
+        });
+      } else {
+        swal({
+          title: "Error!",
+          text: "Please enter your card information correctly!",
+          icon: "error",
+          button: "Ok!",
+        });
       }
     } catch (error) {
+      this.setState(initialState);
+      swal({
+        title: "Error!",
+        text: "Please enter your card information correctly!",
+        icon: "error",
+        button: "Try again!",
+      });
+      let sendThru = () => {
+        this.cardNumber.value = "";
+        this.name.value = "";
+        this.expiry.value = "";
+        this.cvc.value = "";
+      };
       console.log(error);
-      return error?.response?.data;
+      //return error?.response?.data;
     }
+    this.setState(initialState);
     console.log(formData);
     this.setState({ formData });
     this.form.reset();
@@ -105,6 +140,7 @@ export default class PaymentForm extends React.Component {
             >
               <Form.Group>
                 <Form.Input
+                  value={this.state.cardNumber}
                   type="tel"
                   name="cardNumber"
                   className="form-control"
@@ -116,6 +152,7 @@ export default class PaymentForm extends React.Component {
                 />
 
                 <Form.Input
+                  value={this.state.name}
                   type="text"
                   name="name"
                   className="form-control"
@@ -128,6 +165,7 @@ export default class PaymentForm extends React.Component {
 
               <Form.Group>
                 <Form.Input
+                  value={this.state.expiry}
                   type="tel"
                   name="expiry"
                   className="form-control"
@@ -138,6 +176,7 @@ export default class PaymentForm extends React.Component {
                   onFocus={this.handleInputFocus}
                 />
                 <Form.Input
+                  value={this.state.cvc}
                   type="tel"
                   name="cvc"
                   className="form-control"

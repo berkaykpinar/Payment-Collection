@@ -13,6 +13,7 @@ import {
   Button,
 } from "semantic-ui-react";
 import axios, { BASE_URL } from "../api/axios";
+import swal from "sweetalert";
 const ProductDetails = () => {
   let { itemId } = useParams();
   let navigate = useNavigate();
@@ -23,12 +24,9 @@ const ProductDetails = () => {
     try {
       const response = await axios.get(`${BASE_URL}/item/getItem/${itemId}`);
       setItemDetails(response?.data);
-      //console.log(response);
     } catch (error) {
       console.log(error);
       return error?.response?.data;
-      //giriş yaptıktan sonra gitmek istediğimiz sayfaya geri döneriz
-      //navigate("/login", { state: { from: location }, replace: true });
     }
   }, []);
 
@@ -37,7 +35,7 @@ const ProductDetails = () => {
       const response = await axios.post(
         `${BASE_URL}/item/addtocart?id=` + itemId
       );
-      //alert("Item has added your cart!");
+      swal("Item has added your cart!");
       navigate("/cart");
       console.log("!added");
     } catch (error) {
@@ -54,9 +52,6 @@ const ProductDetails = () => {
               {" "}
               <Header as="h3">Buy Right Now {itemId}</Header>
             </Menu.Item>
-            {/* <Menu.Item name="inbox">
-              <Label color="teal">{`${itemDetails?.name}`}</Label>
-            </Menu.Item> */}
 
             <Menu.Item name="inbox">
               <Label color="teal">{`${itemDetails?.price} $`}</Label>

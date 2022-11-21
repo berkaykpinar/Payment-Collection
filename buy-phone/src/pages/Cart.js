@@ -14,7 +14,7 @@ import {
   Card,
 } from "semantic-ui-react";
 import axios, { BASE_URL } from "../api/axios";
-
+import swal from "sweetalert";
 const Cart = () => {
   const [itemList, setItemList] = useState([]);
   const [refresh, setRefresh] = useState(true);
@@ -34,7 +34,7 @@ const Cart = () => {
   let AddItem = async (id) => {
     try {
       const response = await axios.post(`${BASE_URL}/item/addtocart?id=` + id);
-      alert("Item has been added to your cart!");
+      swal("Item has been added to your cart!");
       setRefresh(false);
       setRefresh(true);
       console.log(response);
@@ -46,7 +46,7 @@ const Cart = () => {
   let RemoveItem = async (id) => {
     try {
       const response = await axios.post(`${BASE_URL}/remove?id=` + id);
-      alert("Item has been removed from your cart!");
+      swal("Item has been removed from your cart!");
       setRefresh(false);
       console.log(response);
       setRefresh(true);
