@@ -21,6 +21,8 @@ const initialState = {
   formData: null,
 };
 export default class PaymentForm extends React.Component {
+
+
   state = {
     cardNumber: "",
     name: "",
